@@ -1,0 +1,33 @@
+- name: Configure Master Jenkins
+  hosts: all
+  gather_facts: no
+  vars:
+    ansible_python_interpreter: /usr/bin/python3
+  vars_files:
+    - external_vars.yml
+  become: yes
+  tasks:
+    - name: Create DockerHub Credentials
+      command: >
+        curl -X POST 'http://{{user}}:{{pass}}@localhost:8080/credentials/store/system/domain/_/createCredentials' --data-urlencode 'json={"": "0","credentials": {"scope": "GLOBAL","id": "dockerhub","username": "{{dockerhub_user}}","password": "{{dockerhub_pass}}","description": "dockerhub","$class": "com.cloudbees.plugins.credentials.impl.UsernamePasswordCredentialsImpl"}}'
+    - name: Create Slackb Credentials
+      command: >
+        curl -X POST 'http://{{user}}:{{pass}}@localhost:8080/credentials/store/system/domain/_/createCredentials' --data-urlencode 'json={"": "0","credentials": {"scope": "GLOBAL","id": "slack","secret": "{{slack_pass}}","description": "Slack Password","$class": "org.jenkinsci.plugins.plaincredentials.impl.StringCredentialsImpl"}}'    
+    - name: Copy Docker Pipe Job
+      copy:
+        src: dockerpipeconfig.xml
+        dest: dockerpipeconfig.xml
+    - name: Create Main Pipeline
+      command: >
+        curl -X POST 'http://{{user}}:{{pass}}@localhost:8080/createItem?name=Docker_Build_Push' --data-binary "@dockerpipeconfig.xml" -H "Content-Type:text/xml"
+    - name: sleep for 10 seconds and continue with play
+      wait_for:
+        timeout: 10
+    - name: Run Pipeline
+      command: >
+        curl -X POST http://{{user}}:{{pass}}@localhost:8080/job/Docker_Build_Push/build
+    - name: sleep for 120 to let jenkins finish the job
+      wait_for:
+        timeout: 120
+
+

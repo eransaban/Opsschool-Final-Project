@@ -1,0 +1,42 @@
+<?xml version='1.1' encoding='UTF-8'?>
+<flow-definition plugin="workflow-job@2.36">
+  <actions/>
+  <description></description>
+  <keepDependencies>false</keepDependencies>
+  <properties>
+    <hudson.plugins.jira.JiraProjectProperty plugin="jira@3.0.11"/>
+  </properties>
+  <definition class="org.jenkinsci.plugins.workflow.cps.CpsFlowDefinition" plugin="workflow-cps@2.78">
+    <script>node(&quot;linux&quot;){
+    stage(&quot;git clone&quot;){
+        git &apos;https://github.com/eransaban/opsschool-app&apos;
+    }
+    stage(&quot;build docker&quot;) {
+    customImage =
+    docker.build(&quot;eransaban/final-app&quot;)
+    }
+    stage(&quot;list docker&quot;) {
+    sh &apos;docker images&apos;
+    }
+    stage(&quot;push docker&quot;) {
+    withDockerRegistry(credentialsId: &apos;dockerhub&apos;, url: &apos;&apos;) {
+    customImage.push()
+    }
+    stage(&quot;apply k8s&quot;) {
+        sh label: &apos;&apos;, script: &apos;&apos;&apos;kubectl --kubeconfig /var/jenkins_home/config apply -f /var/jenkins_home/k8s.yml
+    &apos;&apos;&apos;
+    }
+    stage(&quot;wait&quot;) {
+        sh label: &apos;&apos;, script: &apos;sleep 15&apos;
+    }
+    stage(&quot;get ELB link&quot;) {
+        sh label: &apos;&apos;, script: &apos;kubectl --kubeconfig /var/jenkins_home/config get svc | tee -a /var/jenkins_home/address.txt&apos;
+    }
+    }
+
+}</script>
+    <sandbox>true</sandbox>
+  </definition>
+  <triggers/>
+  <disabled>false</disabled>
+</flow-definition>

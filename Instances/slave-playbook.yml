@@ -1,0 +1,22 @@
+- name: Configure Jenkins Slave
+  hosts: all
+  gather_facts: no
+  vars:
+    ansible_python_interpreter: /usr/bin/python3
+  vars_files:
+    - external_vars.yml
+  become: yes
+  tasks:
+     - name: run docker
+       shell: >
+        sudo docker run -d --privileged -e JENKINS_URL=http://{{jenkinsurl}}:8080 -e JENKINS_AUTH={{user}}:{{pass}} -e JENKINS_SLAVE_NAME={{slavename}} -e JENKINS_SLAVE_NUM_EXECUTORS={{executors}} -e JENKINS_SLAVE_LABEL={{labels}} -v /home/ubuntu/jenkinshome:/var/jenkins_home -v /var/run/docker.sock:/var/run/docker.sock eransaban/jenkins-slave-docker2
+       ignore_errors: yes
+     - name: Copy K8s yaml
+       copy:
+         src:  k8s.yml
+         dest: /home/ubuntu/jenkinshome/k8s.yml
+     - name: Copy Kubectl Config
+       copy:
+         src:  ../vpc/kubeconfig_eran-ops-eks-project
+         dest: /home/ubuntu/jenkinshome/config
+       ignore_errors: yes

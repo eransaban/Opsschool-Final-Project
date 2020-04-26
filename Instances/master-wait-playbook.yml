@@ -1,0 +1,17 @@
+- name: Configure Master Jenkins
+  hosts: all
+  gather_facts: no
+  vars:
+    ansible_python_interpreter: /usr/bin/python3
+  vars_files:
+    - external_vars.yml
+  become: yes
+  tasks:
+    - name: sleep for 10 seconds and continue with play
+      wait_for:
+        timeout: 10
+    - name: run docker
+      shell: >
+        sudo docker run -d -p 8080:8080 -p 50000:50000 -e ADMIN_USERNAME={{user}} -e ADMIN_PASSWORD={{pass}} -v /var/run/docker.sock:/var/run/docker.sock eransaban/jenkins-master-docker
+      ignore_errors: yes
+
