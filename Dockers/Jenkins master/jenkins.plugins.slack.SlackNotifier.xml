@@ -1,0 +1,9 @@
+<?xml version='1.1' encoding='UTF-8'?> <jenkins.plugins.slack.SlackNotifier_-DescriptorImpl plugin="slack@2.40">
+  <baseUrl></baseUrl>
+  <teamDomain>OpsSchool</teamDomain>
+  <tokenCredentialId>slack</tokenCredentialId>
+  <botUser>false</botUser>
+  <sendAsText>false</sendAsText>
+  <iconEmoji></iconEmoji>
+  <username></username>
+  <room>#erans-project</room>
