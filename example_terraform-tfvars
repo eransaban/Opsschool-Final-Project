@@ -1,0 +1,6 @@
+NODE_NAME = "slave_"
+USERID = "****"
+PASSWORD= "****"
+NODE_SLAVE_HOME = "/home/ubuntu"
+EXECUTORS = 2
+LABELS = "linux"
