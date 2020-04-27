@@ -65,26 +65,7 @@ resource "aws_instance" "jenkins_slave_private" {
   }
   vpc_security_group_ids = [aws_security_group.jenkins_slave-private.id]
 
-  # connection {
-  #   host = aws_instance.jenkins_slave[count.index].public_ip
-  #   user = "ubuntu"
-  #   private_key = file("jenkins_ec2_key")
-  # }
-
   user_data = file("Scripts/consul-agent-jenkins-slave.sh")
-  # user_data = <<EOT
-  #         #! /bin/bash
-  #         echo \\'StrictHostKeyChecking\\' no >> sudo tee -a /etc/ssh/ssh_config
-  #         sudo apt-get update -y
-  #         sudo apt install docker.io -y
-  #         sudo systemctl start docker
-  #         sudo systemctl enable docker
-  #         sudo usermod -aG docker ubuntu
-  #         mkdir -p /home/ubuntu/jenkinshome
-  #         sudo chown -R ubuntu:ubuntu /home/ubuntu/jenkinshome
-  #         sudo chmod 766 /var/run/docker.sock
-  #         sudo docker run -d --privileged -e JENKINS_URL=http://${aws_instance.jenkins_master.public_ip}:8080 -e JENKINS_AUTH=${var.USERID}:${var.PASSWORD} -e JENKINS_SLAVE_NAME=${var.NODE_NAME}${random_pet.slave.id} -e JENKINS_SLAVE_NUM_EXECUTORS=${var.EXECUTORS} -e JENKINS_SLAVE_LABEL=${var.LABELS} -v /home/ubuntu/jenkinshome:/var/jenkins_home -v /var/run/docker.sock:/var/run/docker.sock eransaban/jenkins-slave-docker2
-  # EOT
     
 
     provisioner "local-exec" {
@@ -114,9 +95,6 @@ resource "aws_instance" "jenkins_slave_private" {
     command = "./helm_setup.sh"
     on_failure = continue
   }  
-  # provisioner "local-exec" {
-  # command = "sleep 120"
-  # }  
 
     provisioner "local-exec" {
     command = "echo ${aws_instance.monitor[0].private_ip} ansible_ssh_extra_args=\\'-o StrictHostKeyChecking=no -o ProxyCommand=\\\"ssh -W %h:%p -q -o StrictHostKeyChecking=no -i jenkins_ec2_key ubuntu@${aws_instance.bastion.public_ip}\\\"\\' > monitor.yml"
