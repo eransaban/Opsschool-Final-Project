@@ -100,22 +100,6 @@ resource "aws_autoscaling_group" "mysql_scale" {
   }
 }
 
-# resource "aws_instance" "mysql-primary" {
-#   ami = "ami-07d0cf3af28718ef8"
-#   instance_type = "t2.micro"
-#   key_name               = var.default_keypair_name
-#   subnet_id = data.aws_subnet.private_subnet2.id
-#   iam_instance_profile  = data.aws_iam_instance_profile.s3.name
-
-#   tags = {
-#     Name = "Mysql Primary"
-#   }
-#   vpc_security_group_ids = [aws_security_group.mysql_sg.id]
-
-#   user_data = data.template_cloudinit_config.mysql.rendered
-
-#   }
-
   data "template_file" "mysql_bkp_userdata" {
   template = file("${path.module}/templates/mysql_usrdata_bkp.sh.tpl")
 
