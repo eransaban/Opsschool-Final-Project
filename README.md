@@ -17,8 +17,8 @@ create an empty IAM ec2 role and copy it's ARN it should be placed in 2 places i
 there are 2 parts in this project first part is creating the network environment
 VPC and EKS (a long process) second part is Jenkins master & slave And Ansible creation
 
-* sometime tf doesn't creatre the private certificate
-so theres a script to create an empty file and also give execute permssion to several script in the the project 
+* sometime tf doesn't create the private certificate
+so theres a script to create an empty file and also give execute permssion to several scripts in the the project 
 fix_cert.sh
 
 you can run the project using script project.sh make sure to give it execute permissions
