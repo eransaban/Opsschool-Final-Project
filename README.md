@@ -7,7 +7,7 @@ the object is to automatically create a full aws vpc with EKS(k8s) and a ci\cd p
 
 Prerequisites:
 
-a linux host (this project assume all os's involved are ubuntu if you use other os please adjsut accordingly folder names)
+a linux host (this project assume all os's involved are ubuntu if you use other os please adjsut accordingly folder names and userdata)
 on this host should be installed aws cli (and configured) terraform ansible kubectl aws-iam-authenticator
 
 Jenkins docker machines (you could use mine or create your own from dockerfile attached)
