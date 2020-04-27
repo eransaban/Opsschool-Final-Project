@@ -28,3 +28,7 @@ AWS machine costs
 some of the macine in this project are ec2.small 
 and not ec2.micro (free teir)
 because of lake of memory on the ec2.micro
+
+
+*Grafana and dockers folders
+has files i used in this project and are avaible from another git or already made as docker image
