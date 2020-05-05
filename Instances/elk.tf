@@ -74,21 +74,3 @@ resource "aws_instance" "elk" {
   user_data = file("Scripts/elk_userdata.sh")
   }
 
-
-# resource "aws_instance" "test" {
-#   ami = "ami-07d0cf3af28718ef8"
-#   instance_type = "t2.micro"
-#   key_name               = "erankeys"
-#   #key_name = aws_key_pair.jenkins_ec2_key.key_name
-#   #subnet_id     = element(tolist(data.aws_subnet_ids.private_sub_ids.ids), 1)
-#   #iam_instance_profile   = aws_iam_instance_profile.consul-join.name
-#   #vpc_id      = "vpc-1f346565"
-#   #availability_zone = "us-east-1"
-#   tags = {
-#     Name = "elk beats"
-#   }
-#   vpc_security_group_ids = [aws_security_group.elk_sg.id]
-
-#   user_data = file("beats.sh")
-
-#   }
