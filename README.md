@@ -33,4 +33,5 @@ because of lake of memory on the ec2.micro
 
 
 *Grafana and dockers folders
-there are files i used in this project and are available from another git or already made as docker image
+there are files i used in this project and are available from another git or already made as a docker image
+the folders are added for review 
