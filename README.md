@@ -36,3 +36,6 @@ because of lake of memory on the ec2.micro
 
 there are files i used in this project and are available from another git or already made as a docker image
 the folders are added for review 
+
+
+presentation available on file Final-Opsschool.pptx
